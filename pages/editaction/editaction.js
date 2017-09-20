@@ -4,7 +4,7 @@ const util = require('../../utils/util.js')
 Page({
   data: {
     alarms: [1, 2, 3],
-    type_array: ['播放提示音', '启动定时器', '停止定时器'],
+    type_array: ['提示音1', '提示音2', '提示音2'],
     type_index:0,
     timer_array: ['定时器1', '定时器2', '定时器3','定时器4'],
     timer_index: 0,
@@ -13,7 +13,7 @@ Page({
     files:[],
     savedFile:"",
     msg:"",
-    src: 'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/tmp_2'
+    src: 'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/store_03'
   },
 
   //事件处理函数
@@ -28,33 +28,19 @@ Page({
       type_index: e.detail.value
     })
     var that = this
+ 
+    var Urls = ['https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/store_01',
+      'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/store_04',
+      'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/store_06']
+    var fileUrl = Urls[e.detail.value];
     wx.downloadFile({
-      url: 'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/tmp_2', //仅为示例，并非真实的资源
+      url: fileUrl,
       success: function (res) {
         wx.playVoice({
           filePath: res.tempFilePath
         })
       }
     })
-    //
-    /*
-    console.log(that.data.savedFile);
-    //that.data.savedFile = "https://www.geocities.jp/weiguo_xue/ringtones/1.mp3"
-    that.data.savedFile = 'http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E06DCBDC9AB7C49FD713D632D313AC4858BACB8DDD29067D3C601481D36E62053BF8DFEAF74C0A5CCFADD6471160CAF3E6A&fromtag=46'
-    wx.playVoice({
-      filePath: that.data.savedFile, 
-      success: function () {
-        that.setData({
-          msg:"play success!"
-        })
-      },
-      fail: function (res) {
-        that.setData({
-          msg: res.errMsg
-        })         
-      }
-    })
-    */
   },
 
   bindTimerChange: function (e) {
@@ -92,6 +78,7 @@ Page({
 
   onLoad: function () {
     var that = this
+    /*
     wx.startRecord({
       success: function (res) {
         var tempFilePath = res.tempFilePath
@@ -110,6 +97,7 @@ Page({
       //结束录音  
       wx.stopRecord()      
     }, 4000)
+    */
     /*
     wx.playVoice({
       filePath: "/ringtones/1.mp3",

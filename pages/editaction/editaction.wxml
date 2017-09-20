@@ -6,6 +6,7 @@
         动作类型：{{type_array[type_index]}}
       </view>
     </picker>
+    <!--
     <picker bindchange="bindTimerChange" value="{{timer_index}}" range="{{timer_array}}">
       <view class="picker">
         定时器：{{timer_array[timer_index]}}
@@ -19,6 +20,7 @@
     <view>
     <view wx:for="{{files}}" wx:for-item="file" wx:key="index"> {{file.filePath}}</view>
     </view>
+    -->
 </view>
  <text class ="location_text">{{msg}}</text>
 <view class="navigate_bar">
