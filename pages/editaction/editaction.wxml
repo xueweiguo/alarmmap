@@ -1,0 +1,28 @@
+<!--editaction.wxml-->
+<view class="edit_area">
+    <audio  src="{{src}}" id="myAudio" ></audio>
+    <picker bindchange="bindTypeChange" value="{{type_index}}" range="{{type_array}}">
+      <view class="picker">
+        动作类型：{{type_array[type_index]}}
+      </view>
+    </picker>
+    <picker bindchange="bindTimerChange" value="{{timer_index}}" range="{{timer_array}}">
+      <view class="picker">
+        定时器：{{timer_array[timer_index]}}
+      </view>
+    </picker>
+    <picker bindchange="bindMediaChange" value="{{media_index}}" range="{{media_array}}">
+      <view class="picker">
+        铃声：{{media_array[media_index]}}
+      </view>
+    </picker>
+    <view>
+    <view wx:for="{{files}}" wx:for-item="file" wx:key="index"> {{file.filePath}}</view>
+    </view>
+</view>
+ <text class ="location_text">{{msg}}</text>
+<view class="navigate_bar">
+    <button bindtap="backButtonTaped" class="navigate_btn_3" style="background-color:coral;">Back</button>
+    <button bindtap="cancelButtonTaped"class="navigate_btn_3" style="background-color:coral;">Cancel</button>
+    <button bindtap="okButtonTaped" class="navigate_btn_3" style="background-color:coral;">OK</button>
+</view>

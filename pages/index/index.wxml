@@ -1,0 +1,13 @@
+<!--index.wxml-->
+<view class="container">
+  <map id = "alarmMap" class="map_area" longitude="{{longitude}}" latitude="{{latitude}}" scale = "{{scale}}" markers="{{markers}}"></map>
+  <text class ="location_text">{{location}}</text>
+</view>
+<view class="navigate_bar">
+    <button bindtap="newButtonTaped" class="navigate_btn_3" style="background-color:coral;">New</button>
+    <button bindtap="editButtonTaped" class="navigate_btn_3" style="background-color:coral;">Edit</button>
+    <button class="navigate_btn_3" style="background-color:coral;">View</button>
+</view>
+
+
+

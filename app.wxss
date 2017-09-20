@@ -1,0 +1,45 @@
+/**app.wxss**/
+.container {
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0rpx 0;
+  box-sizing: border-box;
+}
+
+.map_area{
+  height: 85vh;
+  width: 100%;
+}
+
+.edit_area{
+  height: 90vh;
+  width: 100%;
+  padding: 10rpx 10;
+}
+
+.location_text {
+  height: 5vh;
+  width: 100%;
+  line-height: 5vh;
+  text-align:center;
+  background-color:lightgreen;
+} 
+
+.navigate_bar {
+  height: 10vh;
+  width: 100%;
+  display:flex;
+  align-items:center; 
+  background-color:green;
+}
+
+.navigate_btn_3 {
+  height: 2em;
+  width: 30%;
+  line-height: 2em;
+  padding: 0 0;
+  text-align:center;
+} 

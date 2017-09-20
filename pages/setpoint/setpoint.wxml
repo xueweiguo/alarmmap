@@ -1,0 +1,17 @@
+<!--setpoint.wxml-->
+<view class="container">
+  <map id = "alarmMap" class="map_area" longitude="{{longitude}}" latitude="{{latitude}}" controls="{{controls}}" bindregionchange="regionChanged"></map>
+  <text class ="location_text">{{location}}</text>
+  <picker-view indicator-style="height:1.5em;" class="info_area" value="{{info_index}}" bindchange="pikerChange">
+    <picker-view-column>
+      <view wx:for="{{pois.pois}}" wx:for-item="pois" wx:key="index"> {{pois.title}}</view>
+    </picker-view-column>
+  </picker-view>  
+</view>
+<view class="navigate_bar">
+    <button bindtap="backButtonTaped" class="navigate_btn_3" style="background-color:coral;">Back</button>
+    <button bindtap="editActionButtonTaped" class="navigate_btn_3" style="background-color:coral;">EditAction</button>
+</view>
+
+
+

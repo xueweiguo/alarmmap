@@ -1,0 +1,10 @@
+/**index.wxss**/
+.map_area{
+  height: 50vh;
+  width: 100%;
+}
+
+.info_area{
+  height: 35vh;
+  width: 100%;
+}
