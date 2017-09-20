@@ -13,7 +13,7 @@ Page({
     files:[],
     savedFile:"",
     msg:"",
-    src: 'http://www.geocities.jp/weiguo_xue/ringtones/1.mp3'
+    src: 'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/neusong.mp3'
   },
 
   //事件处理函数
@@ -29,14 +29,14 @@ Page({
     })
     var that = this
     wx.downloadFile({
-      url: 'http://www.geocities.jp/weiguo_xue/ringtones/1.mp3', //仅为示例，并非真实的资源
+      url: 'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/neusong.mp3', //仅为示例，并非真实的资源
       success: function (res) {
         wx.playVoice({
           filePath: res.tempFilePath
         })
       }
     })
-    //this.audioCtx.play()
+    //
     /*
     console.log(that.data.savedFile);
     //that.data.savedFile = "https://www.geocities.jp/weiguo_xue/ringtones/1.mp3"
@@ -62,6 +62,7 @@ Page({
     this.setData({
       timer_index: e.detail.value
     })
+    this.audioCtx.play()
   },
 
   bindMediaChange: function (e) {
@@ -91,7 +92,7 @@ Page({
 
   onLoad: function () {
     var that = this
-    /*
+
     wx.startRecord({
       success: function (res) {
         var tempFilePath = res.tempFilePath
@@ -110,7 +111,7 @@ Page({
       //结束录音  
       wx.stopRecord()      
     }, 10000)
-    */
+
     /*
     wx.playVoice({
       filePath: "/ringtones/1.mp3",
