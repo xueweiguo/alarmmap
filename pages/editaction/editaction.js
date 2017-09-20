@@ -13,7 +13,7 @@ Page({
     files:[],
     savedFile:"",
     msg:"",
-    src: 'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/neusong.mp3'
+    src: 'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/tmp_2'
   },
 
   //事件处理函数
@@ -29,7 +29,7 @@ Page({
     })
     var that = this
     wx.downloadFile({
-      url: 'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/neusong.mp3', //仅为示例，并非真实的资源
+      url: 'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/tmp_2', //仅为示例，并非真实的资源
       success: function (res) {
         wx.playVoice({
           filePath: res.tempFilePath
@@ -92,7 +92,6 @@ Page({
 
   onLoad: function () {
     var that = this
-
     wx.startRecord({
       success: function (res) {
         var tempFilePath = res.tempFilePath
@@ -110,8 +109,7 @@ Page({
     setTimeout(function () {
       //结束录音  
       wx.stopRecord()      
-    }, 10000)
-
+    }, 4000)
     /*
     wx.playVoice({
       filePath: "/ringtones/1.mp3",
