@@ -1,21 +1,41 @@
 
+var ringtoneName = ['ringtone1','ringtone2','ringtong3']
+var ringtoneUrl = [
+  'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/store_01',
+  'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/store_04',
+  'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/store_06'
+]
+
+function getRingtoneNames(){
+  return ringtoneName;
+}
+
+function getRingtoneUrl(index){
+  return ringtoneUrl[index];
+}
+
+function getRingoneUrlByName(name) {
+  var index = ringtones.indexOf(name);
+  if( index != -1){
+    index = 0;
+  }
+  return ringtones[index];
+}
+
+
 function getLocationAndOpenMap(callback) {
   wx.getLocation({
     type: 'gcj02', // 返回 可以 用于 wx. openLocation 的 经纬度 
     success: function( res ) {
-       callback(res)
-       var latitude = res. latitude 
-       var longitude = res. longitude
-       console. log( res)
+       callback(res.longitude, res.latitude)
     }
   })
 }
 
 // 获取某个坐标的地址和周边的pois信息 
-function getPoisByLocation( latitude, longitude, callback ) { 
+function getPoisByLocation(longitude, latitude, callback ) { 
   // 具体json 返回格式可自行参考腾讯地图API接口文档
   var key = "M6VBZ-BPRHX-YPK45-7Q4GC-Z3F7T-7YFO7";  //需要到http://lbs.qq.com/申请
-
   var url = "https://apis.map.qq.com/ws/geocoder/v1/?location=" + latitude + "," + longitude + "&key="+ key+"&get_poi=1"; 
   var defaultUrl = "http://www.apayado.com/pois.json?" + new Date().getTime();
   wx.request( { 
@@ -33,5 +53,7 @@ function getPoisByLocation( latitude, longitude, callback ) {
 
 module.exports = {
   getLocationAndOpenMap: getLocationAndOpenMap,
-  getPoisByLocation: getPoisByLocation
+  getPoisByLocation: getPoisByLocation,
+  getRingtoneNames: getRingtoneNames,
+  getRingtoneUrl: getRingtoneUrl,
 }
