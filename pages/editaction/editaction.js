@@ -1,14 +1,16 @@
 //editaction.js
+const app = getApp()
 const util = require('../../utils/util.js')
 
 Page({
   data: {
+    title:'ABC',
     alarms: [1, 2, 3],
     type_array: ['提示音1', '提示音2', '提示音2'],
     type_index:0,
     timer_array: ['定时器1', '定时器2', '定时器3','定时器4'],
     timer_index: 0,
-    media_array: ['提示音1', '提示音2', '提示音3'],
+    media_array: [],
     media_index: 0,
     files:[],
     savedFile:"",
@@ -33,14 +35,7 @@ Page({
       'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/store_04',
       'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/store_06']
     var fileUrl = Urls[e.detail.value];
-    wx.downloadFile({
-      url: fileUrl,
-      success: function (res) {
-        wx.playVoice({
-          filePath: res.tempFilePath
-        })
-      }
-    })
+    
   },
 
   bindTimerChange: function (e) {
@@ -56,6 +51,7 @@ Page({
     this.setData({
       media_index: e.detail.value
     })
+    this.selectRingtone(e.detail.value)
   },
 
 
@@ -78,6 +74,30 @@ Page({
 
   onLoad: function () {
     var that = this
+    var title = app.globalData.currentAlarm.title;
+    var medias = util.getRingtoneNames()
+    var index = medias.indexOf(title);
+    if(index == -1)
+    {
+      index = 0
+    }
+
+    that.setData({
+      title: title,
+      media_array: medias,
+      media_index : index
+    })
+   /*
+    wx.getSavedFileList({
+      success: function (res) {
+        console.log(res.fileList)
+        that.setData({
+          files: res.fileList
+        })
+      }
+    })
+    */
+  },
     /*
     wx.startRecord({
       success: function (res) {
@@ -110,15 +130,19 @@ Page({
     })
     
     */
-     
-    wx.getSavedFileList({
+
+  selectRingtone:function(index){
+    var url = util.getRingtoneUrl(index)
+    wx.downloadFile({
+      url: url,
       success: function (res) {
-        console.log(res.fileList)
-        that.setData({
-          files:res.fileList
+        wx.playVoice({
+          filePath: res.tempFilePath
         })
       }
     })
   }
+    
+
 })
 
