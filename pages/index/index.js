@@ -37,8 +37,6 @@ Page({
         })
       }
     })
-
-    
   },
 
   editButtonTaped: function () {
