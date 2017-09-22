@@ -1,9 +1,9 @@
 
 var ringtoneName = ['ringtone1','ringtone2','ringtong3']
 var ringtoneUrl = [
-  'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/store_01',
-  'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/store_04',
-  'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/store_06'
+  'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/1.silk',
+  'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/2.silk',
+  'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/3.silk'
 ]
 
 function getRingtoneNames(){

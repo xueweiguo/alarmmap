@@ -29,13 +29,6 @@ Page({
     this.setData({
       type_index: e.detail.value
     })
-    var that = this
- 
-    var Urls = ['https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/store_01',
-      'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/store_04',
-      'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/store_06']
-    var fileUrl = Urls[e.detail.value];
-    
   },
 
   bindTimerChange: function (e) {
@@ -53,7 +46,6 @@ Page({
     })
     this.selectRingtone(e.detail.value)
   },
-
 
   backButtonTaped: function () {
     console.log("editaction.js::backButtonTaped")
@@ -142,7 +134,5 @@ Page({
       }
     })
   }
-    
-
 })
 
