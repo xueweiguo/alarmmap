@@ -47,6 +47,7 @@ Page({
 
   backButtonTaped: function () {
     console.log("setpoint.js::cancelButtonTaped")
+    app.globalData.currentAlarm = null
     wx.navigateBack(1)
   },
 

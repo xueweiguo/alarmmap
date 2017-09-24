@@ -16,7 +16,8 @@ App({
     pixelRatio: 1,
     windowWidth: 100,
     windowHeight: 100,
-    alarmPoints: null,
+    alarms: [],
+    currentAlarmIndex: -1,
     currentAlarm: null,
   }
 })

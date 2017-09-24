@@ -1,9 +1,10 @@
 
-var ringtoneName = ['ringtone1','ringtone2','ringtong3']
+var ringtoneName = ['ringtone1','ringtone2','ringtong3','neusong']
 var ringtoneUrl = [
   'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/1.silk',
   'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/2.silk',
-  'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/3.silk'
+  'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/3.silk',
+  'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/neusong.silk'
 ]
 
 function getRingtoneNames(){
@@ -21,7 +22,6 @@ function getRingoneUrlByName(name) {
   }
   return ringtones[index];
 }
-
 
 function getLocationAndOpenMap(callback) {
   wx.getLocation({
@@ -51,9 +51,22 @@ function getPoisByLocation(longitude, latitude, callback ) {
   });
 }
 
+function playRingtone(index) {
+  var url = getRingtoneUrl(index)
+  wx.downloadFile({
+    url: url,
+    success: function (res) {
+      wx.playVoice({
+        filePath: res.tempFilePath
+      })
+    }
+  })
+}
+
 module.exports = {
   getLocationAndOpenMap: getLocationAndOpenMap,
   getPoisByLocation: getPoisByLocation,
   getRingtoneNames: getRingtoneNames,
   getRingtoneUrl: getRingtoneUrl,
+  playRingtone: playRingtone,
 }
