@@ -45,12 +45,6 @@ Page({
     })
   },
 
-  backButtonTaped: function () {
-    console.log("setpoint.js::cancelButtonTaped")
-    app.globalData.currentAlarm = null
-    wx.navigateBack(1)
-  },
-
   //生命周期
   onShow: function(){
     console.log("setpoints.js onShow")
@@ -69,8 +63,13 @@ Page({
        location: location,
     });
   },
-  //内部处理
 
+  onUnload: function(){
+    console.log("setpoint.js::cancelButtonTaped")
+    app.globalData.currentAlarm = null
+  },
+
+  //内部处理
   getPoisInformation:function(){
     var that = this
     var mapCtx = wx.createMapContext('alarmMap')

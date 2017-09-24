@@ -73,17 +73,7 @@ Page({
   
   onShow: function() {
     var that = this
-    if (app.globalData.currentAlarm != null){
-      if (app.globalData.currentAlarmIndex == -1){
-        //edit alarm
-        app.globalData.alarms.push(app.globalData.currentAlarm);
-      }else{
-        //new alarm 
-        app.globalData.alarms[app.globalData.currentAlarmIndex] = app.globalData.currentAlarm;
-      }
-      app.globalData.currentAlarm = null;
-    }
-
+    
     if (app.globalData.alarms.length > 0){
       var locations = app.globalData.alarms.map(function (x) {
                         return { longitude: x.longitude, latitude: x.latitude }
@@ -129,7 +119,7 @@ Page({
         }
       })
     }
-    console.log(getCurrentPages())
+    console.log("Page count = " + getCurrentPages().length)
   },
 
   onLoad:function(){

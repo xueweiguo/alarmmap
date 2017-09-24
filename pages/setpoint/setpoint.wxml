@@ -9,7 +9,6 @@
   </picker-view>  
 </view>
 <view class="navigate_bar">
-    <button bindtap="backButtonTaped" class="navigate_btn_3" style="background-color:coral;">Back</button>
     <button bindtap="editActionButtonTaped" class="navigate_btn_3" style="background-color:coral;">EditAction</button>
 </view>
 

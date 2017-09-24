@@ -55,31 +55,37 @@ Page({
     util.playRingtone(e.detail.value)
   },
 
-  backButtonTaped: function () {
-    console.log("editaction.js::backButtonTaped")
-    wx.navigateBack(1)
-  },
-
   okButtonTaped: function () {
     console.log("editaction.js::okButtonTaped")
     app.globalData.currentAlarm.moitor_type = this.data.monitor_array[this.data.monitor_index]
     app.globalData.currentAlarm.action_type = this.data.action_array[this.data.action_index]
+
     if (app.globalData.currentAlarm.action_type == '播放提示音') {
       app.globalData.currentAlarm.media = this.data.media_array[this.data.media_index]
     } else {
       app.globalData.currentAlarm.timer = this.data.timer_array[this.data.timer_index]
     }
+    
+    if (app.globalData.currentAlarmIndex == -1) {
+      //edit alarm
+        app.globalData.alarms.push(app.globalData.currentAlarm);
+    } else {
+       //new alarm 
+      app.globalData.alarms[app.globalData.currentAlarmIndex] = app.globalData.currentAlarm;
+    }
+    app.globalData.currentAlarm = null;
+
     console.log(app.globalData.currentAlarm);
-    wx.redirectTo({
-      url: '../index/index'
+    wx.navigateBack({
+      delta: getCurrentPages().length - 1
     })
   },
 
   cancelButtonTaped: function () {
     console.log("editaction.js::calcelButtonTaped")
     app.globalData.currentAlarm = null
-    wx.redirectTo({
-      url: '../index/index'
+    wx.navigateBack({
+      delta:getCurrentPages().length - 1 
     })
   },
 
