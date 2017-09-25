@@ -9,7 +9,24 @@ App({
     } catch (e) {
       console.log("wx.getSystemInfoSync() error!")
     }
-    this.globalData.alarmPoints = wx.getStorageSync('alarmPoints') || []
+    this.globalData.alarms = wx.getStorageSync('alarms') || []
+  },
+
+  saveAlarm: function(alarm){
+    if (alarm.dateTime == null) {
+      //edit alarm
+      alarm.dateTime = new Date()
+      this.globalData.alarms.push(alarm);
+    } else {
+      //new alarm 
+      //app.globalData.alarms.push(app.globalData.currentAlarm);
+      this.globalData.alarms.forEach(function (a, i, alarms) {
+        if (a.dateTime == alarm.dateTime){
+          alarms[i] = alarm
+        }  
+      })
+    }
+    wx.setStorageSync('alarms', this.globalData.alarms)
   },
 
   globalData: {
@@ -17,7 +34,6 @@ App({
     windowWidth: 100,
     windowHeight: 100,
     alarms: [],
-    currentAlarmIndex: -1,
     currentAlarm: null,
   }
 })

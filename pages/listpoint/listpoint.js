@@ -1,12 +1,19 @@
 //logs.js
+const app = getApp()
 const util = require('../../utils/util.js')
 
 Page({
   data: {
-    alarms: [1, 2, 3, 4, 5]
+    alarms: [{title:''}],
+    current_alarm: 0
   },
 
   //事件处理函数
+  alarmTaped:function(e){
+    console.log(e.target.id);
+    this.setData({current_alarm:e.target.id});
+  },
+
   backButtonTaped: function () {
     console.log("listpoint.js::backButtonTaped")
     wx.navigateTo({
@@ -14,11 +21,14 @@ Page({
     })
   },
 
-  actionButtonTaped: function () {
+  editButtonTaped: function () {
     console.log("listpoint.js::actionButtonTaped")
-    wx.navigateTo({
-      url: '../editaction/editaction'
-    })
+    if(this.data.alarms.length > 0){
+      app.globalData.currentAlarm = app.globalData.alarms[this.data.current_alarm]
+      wx.navigateTo({
+        url: '../setpoint/setpoint'
+      })
+    }
   },
 
   cancelButtonTaped: function () {
@@ -30,12 +40,11 @@ Page({
 
 
   onLoad: function () {
-    /*
-    this.setData({
-      logs: (wx.getStorageSync('logs') || []).map(log => {
-        return util.formatTime(new Date(log))
-      })
+    var alarms = app.globalData.alarms.map(function (x) {
+      return { title: x.title }
     })
-    */
+    this.setData({
+      alarms:alarms
+    })
   }
 })

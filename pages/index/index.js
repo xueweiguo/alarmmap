@@ -22,7 +22,6 @@ function countdown(that) {
   }
 }
 
-
 Page({
   data: {
     longitude: 0,

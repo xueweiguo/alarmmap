@@ -81,11 +81,9 @@ Page({
             pois: data.pois,
             location: res.latitude.toFixed(4) + ',' + res.longitude.toFixed(4),
           });
-          app.globalData.currentAlarm = {
-            longitude: res.longitude,
-            latitude: res.latitude,
-            title: data.pois[0].title
-          };
+          app.globalData.currentAlarm.longitude = res.longitude
+          app.globalData.currentAlarm.latitude = res.latitude
+          app.globalData.currentAlarm.title = data.pois[0].title
         })
       }
     })

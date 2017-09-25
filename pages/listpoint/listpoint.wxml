@@ -1,11 +1,10 @@
 <!--logs.wxml-->
-<scroll-view scroll-y style="height: 80vh;" class="container log-list">
-  <block wx:for="{{alarms}}" wx:for-item="alarm">
-    <text class="log-item">{{index + 1}}. {{alarm}}</text>
-  </block>
+<scroll-view scroll-y style="height:80vh;display:flex;flex-direction:column">
+  <view bindtap="alarmTaped" wx:for="{{alarms}}" wx:for-item="alarm" wx:key="index" style="display:flex;flex-direction:column">
+    <text wx:if="{{current_alarm==index}}" id="{{index}}" style = "background-color:lightgreen;" class="log-item">{{index + 1}}.{{alarm.title}}</text>
+    <text wx:else id="{{index}}" style = "background-color:white;" class="log-item">{{index + 1}}.{{alarm.title}}</text>
+  </view>
 </scroll-view>
 <view class="navigate_bar">
-    <button bindtap="backButtonTaped" class="navigate_btn_3" style="background-color:coral;">Back</button>
-    <button bindtap="actionButtonTaped" class="navigate_btn_3" style="background-color:coral;">Action</button>
-    <button bindtap="cancelButtonTaped" class="navigate_btn_3" style="background-color:coral;">Cancel</button>
+    <button bindtap="editButtonTaped" class="navigate_btn_3" style="background-color:coral;">Edit Action</button>
 </view>

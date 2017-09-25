@@ -65,14 +65,7 @@ Page({
     } else {
       app.globalData.currentAlarm.timer = this.data.timer_array[this.data.timer_index]
     }
-    
-    if (app.globalData.currentAlarmIndex == -1) {
-      //edit alarm
-        app.globalData.alarms.push(app.globalData.currentAlarm);
-    } else {
-       //new alarm 
-      app.globalData.alarms[app.globalData.currentAlarmIndex] = app.globalData.currentAlarm;
-    }
+    app.saveAlarm(app.globalData.currentAlarm)
     app.globalData.currentAlarm = null;
 
     console.log(app.globalData.currentAlarm);
