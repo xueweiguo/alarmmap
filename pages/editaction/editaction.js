@@ -65,7 +65,7 @@ Page({
     } else {
       app.globalData.currentAlarm.timer = this.data.timer_array[this.data.timer_index]
     }
-    app.saveAlarm(app.globalData.currentAlarm)
+    app.addAlarm(app.globalData.currentAlarm)
     app.globalData.currentAlarm = null;
 
     console.log(app.globalData.currentAlarm);

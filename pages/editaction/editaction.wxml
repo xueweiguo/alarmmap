@@ -33,6 +33,6 @@
 </view>
  <text class ="location_text">{{msg}}</text>
 <view class="navigate_bar">
-    <button bindtap="cancelButtonTaped"class="navigate_btn_3" style="background-color:coral;">Cancel</button>
-    <button bindtap="okButtonTaped" class="navigate_btn_3" style="background-color:coral;">OK</button>
+    <button bindtap="cancelButtonTaped"class="navigate_btn_3" style="background-color:coral;">取消</button>
+    <button bindtap="okButtonTaped" class="navigate_btn_3" style="background-color:coral;">决定</button>
 </view>

@@ -4,9 +4,9 @@
   <text class ="location_text">{{location}}</text>
 </view>
 <view class="navigate_bar">
-    <button bindtap="newButtonTaped" class="navigate_btn_3" style="background-color:coral;">New</button>
-    <button bindtap="editButtonTaped" class="navigate_btn_3" style="background-color:coral;">Edit</button>
-    <button class="navigate_btn_3" style="background-color:coral;">View</button>
+    <button bindtap="newButtonTaped" class="navigate_btn_3" style="background-color:coral;">新建</button>
+    <button bindtap="editButtonTaped" class="navigate_btn_3" style="background-color:coral;">管理</button>
+    <button class="navigate_btn_3" style="background-color:coral;">查看</button>
 </view>
 
 

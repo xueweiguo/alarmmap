@@ -1,4 +1,4 @@
-//logs.js
+//listpoint.js
 const app = getApp()
 const util = require('../../utils/util.js')
 
@@ -14,21 +14,23 @@ Page({
     this.setData({current_alarm:e.target.id});
   },
 
-  backButtonTaped: function () {
-    console.log("listpoint.js::backButtonTaped")
-    wx.navigateTo({
-      url: '../setpoint/setpoint'
-    })
-  },
-
   editButtonTaped: function () {
-    console.log("listpoint.js::actionButtonTaped")
-    if(this.data.alarms.length > 0){
+    console.log("listpoint.js::editButtonTaped")
+    if (this.data.alarms.length > 0) {
       app.globalData.currentAlarm = app.globalData.alarms[this.data.current_alarm]
       wx.navigateTo({
         url: '../setpoint/setpoint'
       })
     }
+  },
+
+  deleteButtonTaped: function () {
+    console.log("listpoint.js::deleteButtonTaped")
+    app.deleteAlarm(this.data.current_alarm);
+    if (this.data.current_alarm >= app.globalData.alarms.length) {
+      this.data.current_alarm = app.globalData.alarms.length - 1
+    }
+    this.updateAlarms()
   },
 
   cancelButtonTaped: function () {
@@ -40,11 +42,15 @@ Page({
 
 
   onLoad: function () {
+    this.updateAlarms()
+  },
+
+  updateAlarms: function(){
     var alarms = app.globalData.alarms.map(function (x) {
       return { title: x.title }
     })
     this.setData({
-      alarms:alarms
+      alarms: alarms
     })
   }
 })

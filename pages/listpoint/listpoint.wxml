@@ -6,5 +6,6 @@
   </view>
 </scroll-view>
 <view class="navigate_bar">
-    <button bindtap="editButtonTaped" class="navigate_btn_3" style="background-color:coral;">Edit Action</button>
+    <button bindtap="editButtonTaped" class="navigate_btn_3" style="background-color:coral;">编辑</button>
+    <button bindtap="deleteButtonTaped" class="navigate_btn_3" style="background-color:coral;">删除</button>
 </view>
