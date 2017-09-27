@@ -3,23 +3,13 @@
 const app = getApp()
 const util = require('../../utils/util.js')
 
-function countdown(that) {
-  var second = that.data.second
-  if (second == 0) {
-    console.log("Time Out...");
-    util.playRingtone(3);
-    return;
-  }else{
-    console.log("counterDown!");
-    var time = setTimeout(function () {
-      that.setData({
-        second: second - 1
-      });
-      countdown(that);
+function startTimer(interval, onTimer) {
+  var time = setTimeout(function () {
+      onTimer();
+      startTimer(interval, onTimer);
     },
-      1000
-    )
-  }
+    interval
+  )
 }
 
 Page({
@@ -122,6 +112,9 @@ Page({
   },
 
   onLoad:function(){
-    //countdown(this);
+    startTimer(1000,function(){
+      console.log("OnTimer!")
+    });
   },
+
 })
