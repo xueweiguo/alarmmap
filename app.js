@@ -12,7 +12,7 @@ App({
     this.globalData.alarms = wx.getStorageSync('alarms') || []
   },
 
-  saveAlarm: function(alarm){
+  addAlarm: function(alarm){
     if (alarm.dateTime == null) {
       //edit alarm
       alarm.dateTime = new Date()
@@ -27,6 +27,13 @@ App({
       })
     }
     wx.setStorageSync('alarms', this.globalData.alarms)
+  },
+
+  deleteAlarm: function(index){
+    if(index >= 0 && index < this.globalData.alarms.length) {
+      this.globalData.alarms.splice(index, 1);
+      wx.setStorageSync('alarms', this.globalData.alarms)
+    }
   },
 
   globalData: {
