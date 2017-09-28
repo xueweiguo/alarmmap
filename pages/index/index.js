@@ -59,6 +59,13 @@ Page({
       url: '../listpoint/listpoint'
     })
   },
+
+  showButtonTaped: function () {
+    console.log("index.js::showButtonTaped")
+    wx.navigateTo({
+      url: '../logs/logs'
+    })
+  },
   
   onShow: function() {
     var that = this
@@ -69,7 +76,7 @@ Page({
                       })
       this.mapCtx = wx.createMapContext('alarmMap')
       this.mapCtx.includePoints({
-        padding:[10],
+        padding:[20],
         points:locations
       })
       this. mapCtx.getCenterLocation({
@@ -112,8 +119,13 @@ Page({
   },
 
   onLoad:function(){
-    startTimer(1000,function(){
-      console.log("OnTimer!")
+    startTimer(30000,function(){
+      //console.log("OnTimer!")
+      var now = new Date();
+      wx.setTopBarText({
+        text: now.getMinutes() + ":" + now.getSeconds(),
+      })
+      app.playRingtone(2)
     });
   },
 

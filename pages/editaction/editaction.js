@@ -52,7 +52,7 @@ Page({
     this.setData({
       media_index: e.detail.value
     })
-    util.playRingtone(e.detail.value)
+    app.playRingtone(e.detail.value)
   },
 
   okButtonTaped: function () {
@@ -85,7 +85,7 @@ Page({
   onLoad: function () {
     var that = this
     var title = app.globalData.currentAlarm.title;
-    var medias = util.getRingtoneNames()
+    var medias = app.getRingtoneNames()
     var index = medias.indexOf(title);
     if(index == -1)
     {
