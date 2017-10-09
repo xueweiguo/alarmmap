@@ -68,8 +68,7 @@ Page({
   },
   
   onShow: function() {
-    var that = this
-    
+    var that = this    
     if (app.globalData.alarms.length > 0){
       var locations = app.globalData.alarms.map(function (x) {
                         return { longitude: x.longitude, latitude: x.latitude }
@@ -125,7 +124,11 @@ Page({
       wx.setTopBarText({
         text: now.getMinutes() + ":" + now.getSeconds(),
       })
-      app.playRingtone(2)
+      wx.getLocation({
+        success: function(res) {
+          app.checkAlarms(res.latitude, res.longitude);
+        },
+      })
     });
   },
 

@@ -75,7 +75,7 @@ Page({
     var mapCtx = wx.createMapContext('alarmMap')
     mapCtx.getCenterLocation({
       success: function (res) {
-        util.getPoisByLocation(res.longitude, res.latitude, function (data) {
+        util.getPoisByLocation(res.latitude, res.longitude, function (data) {
           console.log(data)
           that.setData({
             pois: data.pois,

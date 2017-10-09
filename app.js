@@ -2,11 +2,21 @@
 
 var ringtoneName = ['ringtone1', 'ringtone2', 'ringtong3', 'neusong']
 var ringtoneUrl = [
+    'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/1.silk',
+      'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/2.silk',
+        'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/3.silk',
+          'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/neusong.silk'
+]
+
+var ringtoneName = ['ringtone1', 'ringtone2', 'ringtong3', 'neusong']
+var ringtoneUrl = [
   'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/1.silk',
   'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/2.silk',
   'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/3.silk',
   'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/neusong.silk'
 ]
+
+const util = require('./utils/util.js')
 
 App({
   onLaunch: function () {
@@ -47,6 +57,14 @@ App({
       this.globalData.alarms.splice(index, 1);
       wx.setStorageSync('alarms', this.globalData.alarms)
     }
+  },
+
+  checkAlarms: function (latitude, longitude) {
+    var that = this;
+    this.globalData.alarms.forEach(function(v, i, alarms){
+      var msg = util.getGreatCircleDistance(latitude, longitude, v.latitude, v.longitude)
+      that.addLog(msg)
+    })
   },
 
   getRingtoneNames: function(){
