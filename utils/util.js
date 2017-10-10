@@ -5,7 +5,7 @@ function  getRad(d) {
   return  d * PI / 180.0;
 }  
 
-function getGreatCircleDistance(lat1, lng1, lat2, lng2) {
+function getDistance(lat1, lng1, lat2, lng2) {
   var  radLat1  =  getRad(lat1);
   var  radLat2  =  getRad(lat2);
   var  a  =  radLat1  -  radLat2;
@@ -47,6 +47,5 @@ function getPoisByLocation(latitude, longitude, callback ) {
 module.exports = {
   getLocation: getLocation,
   getPoisByLocation: getPoisByLocation,
-  getGreatCircleDistance:getGreatCircleDistance,
-  
+  getDistance:getDistance,
 }

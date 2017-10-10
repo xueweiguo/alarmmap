@@ -40,14 +40,16 @@ Page({
     })
   },
 
-
   onLoad: function () {
     this.updateAlarms()
   },
 
   updateAlarms: function(){
     var alarms = app.globalData.alarms.map(function (x) {
-      return { title: x.title }
+      //return { title: x.title }
+      return { title: x.title,
+              dis: 0
+      }
     })
     this.setData({
       alarms: alarms

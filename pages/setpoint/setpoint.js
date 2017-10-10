@@ -35,7 +35,7 @@ Page({
 
   pikerChange: function (e) {
     const val = e.detail.value
-    app.globalData.currentAlarm.title = this.data.pois[val].title
+    app.globalData.currentAlarm.setTitle(this.data.pois[val].title)
   },
 
   editActionButtonTaped: function () {

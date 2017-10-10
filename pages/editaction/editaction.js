@@ -6,7 +6,7 @@ Page({
   data: {
     title:'',
     alarms: [1, 2, 3],
-    monitor_array: ['接近监控点', '离开监控点半'],
+    monitor_array: ['接近监控点', '离开监控点'],
     monitor_index:0,
     action_array: ['播放提示音', '启动定时器', '停止定时器', '暂停定时器', '再开定时器'],
     action_index: 0,
@@ -57,18 +57,19 @@ Page({
 
   okButtonTaped: function () {
     console.log("editaction.js::okButtonTaped")
-    app.globalData.currentAlarm.moitor_type = this.data.monitor_array[this.data.monitor_index]
-    app.globalData.currentAlarm.action_type = this.data.action_array[this.data.action_index]
+    var alarm = app.globalData.currentAlarm
+    alarm.setMonitorType(this.data.monitor_array[this.data.monitor_index])
+    alarm.setActionType(this.data.action_array[this.data.action_index])
 
-    if (app.globalData.currentAlarm.action_type == '播放提示音') {
-      app.globalData.currentAlarm.media = this.data.media_array[this.data.media_index]
+    if (alarm.action_type == '播放提示音') {
+      var url = app.getRingtoneUrl(this.data.media_index)
+      alarm.setMedia(url)
     } else {
-      app.globalData.currentAlarm.timer = this.data.timer_array[this.data.timer_index]
+      alarm.setTimer(this.data.timer_array[this.data.timer_index])
     }
-    app.addAlarm(app.globalData.currentAlarm)
-    app.globalData.currentAlarm = null;
+    app.addAlarm(alarm)
+    app.globalData.currentAlarm = undefined;
 
-    console.log(app.globalData.currentAlarm);
     wx.navigateBack({
       delta: getCurrentPages().length - 1
     })
@@ -97,48 +98,6 @@ Page({
       media_array: medias,
       media_index : index
     })
-   /*
-    wx.getSavedFileList({
-      success: function (res) {
-        console.log(res.fileList)
-        that.setData({
-          files: res.fileList
-        })
-      }
-    })
-    */
   },
-    /*
-    wx.startRecord({
-      success: function (res) {
-        var tempFilePath = res.tempFilePath
-        wx.saveFile({
-          tempFilePath: tempFilePath,
-          success: function (res) {
-            that.data.savedFile = res.savedFilePath
-          }
-        })
-      },
-      fail: function (res) {
-        //录音失败
-      }
-    })
-    setTimeout(function () {
-      //结束录音  
-      wx.stopRecord()      
-    }, 4000)
-    */
-    /*
-    wx.playVoice({
-      filePath: "/ringtones/1.mp3",
-      success: function () {
-        console.log("play success!");
-      },
-      fail: function (res) {
-        console.log(res);
-      }
-    })
-    
-    */
 })
 

@@ -1,5 +1,8 @@
 //index.js
 //获取应用实例
+
+import { Alarm } from '../../utils/alarm.js'
+
 const app = getApp()
 const util = require('../../utils/util.js')
 
@@ -39,10 +42,7 @@ Page({
     this.mapCtx = wx.createMapContext('alarmMap')
     this.mapCtx.getCenterLocation({
       success: function (res) {
-        app.globalData.currentAlarm = {
-          longitude: res.longitude,
-          latitude: res.latitude
-        }
+        app.globalData.currentAlarm = new Alarm(res.latitude, res.longitude)
         wx.navigateTo({
           url: '../setpoint/setpoint'
         })
@@ -124,11 +124,7 @@ Page({
       wx.setTopBarText({
         text: now.getMinutes() + ":" + now.getSeconds(),
       })
-      wx.getLocation({
-        success: function(res) {
-          app.checkAlarms(res.latitude, res.longitude);
-        },
-      })
+      app.checkAlarms();
     });
   },
 
