@@ -107,7 +107,7 @@ App({
   addLog:function(msg){
     this.globalData.logs.push({time:new Date, message:msg});
     if(this.globalData.logs.length > 100){
-      this.globalData.logs.length.shift();
+      this.globalData.logs.shift();
     }
   },
 
