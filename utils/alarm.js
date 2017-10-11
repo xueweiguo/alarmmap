@@ -4,6 +4,7 @@ const util = require('./util.js')
 
 const CHECK_BUFFER_SIZE = 3
 
+//构造函数
 function Alarm(data){
   this.latitude = data.latitude
   this.longitude = data.longitude
@@ -16,6 +17,7 @@ function Alarm(data){
   this.timer = data.timer
 }
 
+//定义原型
 Alarm.prototype ={
   constructor:Alarm,
 
