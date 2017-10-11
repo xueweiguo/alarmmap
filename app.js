@@ -1,5 +1,7 @@
 //app.js
 
+import { Alarm } from './utils/alarm.js'
+
 var ringtoneName = ['ringtone1', 'ringtone2', 'ringtong3', 'neusong']
 var ringtoneUrl = [
   'https://raw.githubusercontent.com/xueweiguo/alarmmap/master/ringtones/1.silk',
@@ -22,7 +24,12 @@ App({
       console.log("wx.getSystemInfoSync() error!")
     }
     //读出监控点信息。
-    //this.globalData.alarms = wx.getStorageSync('alarms') || []
+    var that = this
+    var alarm_array = wx.getStorageSync('alarms') || []
+    alarm_array.forEach(function(alarm_data){
+      that.globalData.alarms.push(new Alarm(alarm_data));
+    })
+
     this.addLog("app.onLaunch")
     voiceplayer.prepare()
   },
@@ -34,7 +41,7 @@ App({
       this.globalData.alarms.push(alarm);
     } else {
       //new alarm 
-      app.globalData.alarms.push(app.globalData.currentAlarm);
+      this.globalData.alarms.push(app.globalData.currentAlarm);
       this.globalData.alarms.forEach(function (a, i, alarms) {
         if (a.dateTime == alarm.dateTime){
           alarms[i] = alarm
@@ -51,12 +58,12 @@ App({
     }
   },
 
-  checkAlarms: function () {
-    return voiceplayer.play(ringtoneUrl[0])
+  checkAlarms: function (callback) {
     var that = this;
-    wx.getLocation({
+    that.globalData.here = undefined
+    util.getLocation({
       success: function (res) {
-        that.globalData.currentLocation = {
+        that.globalData.here = {
           latitude: res.latitude,
           longitude: res.longitude,
           accuracy: res.accuracy
@@ -71,11 +78,13 @@ App({
               first_fired = that.globalData.alarms[index]
             }
           }
+          index++
         }
         if(first_fired != undefined){
           first_fired.executeAction()
         }
-      }
+        callback()
+      },
     })
   },
 
@@ -106,7 +115,7 @@ App({
     pixelRatio: 1,
     windowWidth: 100,
     windowHeight: 100,
-    currentLocation: {longitude:0, latitude:0},
+    here: undefined,
     alarms: [],
     currentAlarm: null,
     logs:[],

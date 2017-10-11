@@ -20,7 +20,7 @@ function getLocation(callback) {
   wx.getLocation({
     type: 'gcj02', // 返回 可以 用于 wx. openLocation 的 经纬度 
     success: function( res ) {
-       callback(res.longitude, res.latitude)
+      callback.success(res)
     }
   })
 }

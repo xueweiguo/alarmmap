@@ -42,7 +42,8 @@ Page({
     this.mapCtx = wx.createMapContext('alarmMap')
     this.mapCtx.getCenterLocation({
       success: function (res) {
-        app.globalData.currentAlarm = new Alarm(res.latitude, res.longitude)
+        app.globalData.currentAlarm = new Alarm({latitude:res.latitude, 
+                                                longitude:res.longitude})
         wx.navigateTo({
           url: '../setpoint/setpoint'
         })
@@ -67,64 +68,47 @@ Page({
     })
   },
   
-  onShow: function() {
+  showMap: function() {
     var that = this    
-    if (app.globalData.alarms.length > 0){
-      var locations = app.globalData.alarms.map(function (x) {
-                        return { longitude: x.longitude, latitude: x.latitude }
-                      })
-      this.mapCtx = wx.createMapContext('alarmMap')
-      this.mapCtx.includePoints({
-        padding:[20],
-        points:locations
-      })
-      this. mapCtx.getCenterLocation({
-        success: function (res) {
-          var latitude = res.latitude
-          var longitude = res.longitude
-          console.log(res)
-          var location = latitude.toFixed(2) + ',' + longitude.toFixed(2)
-          that.setData({
-            location: location,
-            markers: locations
-          }) 
-        },
-        fail:function(res){
-          console.log(res)
-        }
-      })
-    }else{
-      wx.getLocation({
-        type: 'gcj02', // 返回 可以 用于 wx. openLocation 的 经纬度 
-        success: function (res) {
-          var latitude = res.latitude
-          var longitude = res.longitude
-          console.log(res)
-          var location = latitude.toFixed(2) + ',' + longitude.toFixed(2)
-          that.setData({ longitude: longitude, 
-                        latitude: latitude, 
-                        location: location,
-                        markers: [{latitude: latitude,
-                                    longitude: longitude,
-                                  }]
-                      });
-        },
-        fail: function (res) {
-          console.log(res)
-        }
-      })
+    var markers = app.globalData.alarms.map(function (x) {
+      return { longitude: x.longitude, latitude: x.latitude }
+    })
+    var here = app.globalData.here
+    var loc_text = undefined
+    if(here != undefined){
+      markers.push({longitude:here.longitude,
+                    latitude: here.latitude,
+                    iconPath: '/images/control.png'})
+      loc_text = here.latitude.toFixed(6) + ',' + here.longitude.toFixed(6)
     }
-    console.log("Page count = " + getCurrentPages().length)
+
+    this.mapCtx = wx.createMapContext('alarmMap')
+    this.mapCtx.includePoints({
+        padding:[20],
+        points:markers
+    })
+
+    this.setData({
+      location: loc_text,
+      markers: markers
+    }) 
   },
 
   onLoad:function(){
-    startTimer(30000,function(){
+    var that = this
+    app.checkAlarms(function(){
+      that.showMap();
+    });
+    
+    startTimer(10000,function(){
       //console.log("OnTimer!")
       var now = new Date();
       wx.setTopBarText({
         text: now.getMinutes() + ":" + now.getSeconds(),
       })
-      app.checkAlarms();
+      app.checkAlarms(function () {
+        that.showMap();
+      });
     });
   },
 

@@ -4,11 +4,16 @@ const util = require('./util.js')
 
 const CHECK_BUFFER_SIZE = 3
 
-function Alarm(latitude, longitude){
-  this.latitude = latitude
-  this.longitude = longitude
-  this.state = 'new'
+function Alarm(data){
+  this.latitude = data.latitude
+  this.longitude = data.longitude
+  this.state = data.state
   this.checkBuffer = []
+  this.title = data.title
+  this.monitor_type = data.monitor_type
+  this.action_type = data.action_type
+  this.meaia_url = data.media_url
+  this.timer = data.timer
 }
 
 Alarm.prototype ={
@@ -34,15 +39,15 @@ Alarm.prototype ={
     this.timer = t_name
   },
 
-  checkLocation: function (latitude, longitude, accracy) {
+  checkLocation: function (latitude, longitude, accuracy) {
+    const app = getApp()
     var that = this;
     var distance = util.getDistance(this.latitude, this.longitude, latitude, longitude)
-
-    //
+    app.addLog(distance + "," + accuracy)
     if (distance < accuracy) {
       this.checkBuffer.push(1)
     } else {
-      this.heckBuffer.push(-1)
+      this.checkBuffer.push(-1)
     }
 
     if (this.checkBuffer.length > CHECK_BUFFER_SIZE) {
@@ -50,7 +55,7 @@ Alarm.prototype ={
     }
 
     var sum = 0;
-    that.forEach(function (value) {sum += value})
+    that.checkBuffer.forEach(function (value) {sum += value})
 
     if (this.moitor_type == '接近监控点') {
       if (this.state == 'new') {
