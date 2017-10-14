@@ -1,11 +1,17 @@
 <!--index.wxml-->
 <view class="container">
   <map id = "alarmMap" class="map_area" longitude="{{longitude}}" latitude="{{latitude}}" scale = "{{scale}}" markers="{{markers}}"></map>
-  <text class ="location_text">{{location}}</text>
+  <scroll-view scroll-y style="height:40vh;display:flex;flex-direction:column">
+  <view bindtap="alarmTaped" wx:for="{{alarms}}" wx:for-item="alarm" wx:key="index" style="display:flex;flex-direction:column">
+    <text wx:if="{{current_alarm==index}}" id="{{index}}" style = "background-color:lightgreen;" class="log-item">{{index + 1}}.{{alarm.title}}({{alarm.status}})</text>
+    <text wx:else id="{{index}}" style = "background-color:white;" class="log-item">{{index + 1}}.{{alarm.title}}({{alarm.status}})</text>
+  </view>
+</scroll-view>
 </view>
 <view class="navigate_bar">
     <button bindtap="newButtonTaped" class="navigate_btn_3" style="background-color:coral;">新建</button>
-    <button bindtap="editButtonTaped" class="navigate_btn_3" style="background-color:coral;">管理</button>
+    <button bindtap="deleteButtonTaped" class="navigate_btn_3" style="background-color:coral;">删除</button>
+    <button bindtap="cancelButtonTaped" class="navigate_btn_3" style="background-color:coral;">取消</button>
     <button bindtap="showButtonTaped" class="navigate_btn_3" style="background-color:coral;">查看</button>
 </view>
 

@@ -69,18 +69,20 @@ App({
           accuracy: res.accuracy
         }
         var index = 0;
-        var first_fired = undefined
+        var first_fired = undefined;
         while (index < that.globalData.alarms.length) {
           var alarm = that.globalData.alarms[index]
           alarm.checkLocation(res.latitude, res.longitude, res.accuracy)
           if (alarm.state == 'fired') {
+            that.addLog(alarm.title + " fired.")
             if(first_fired == undefined){
-              first_fired = that.globalData.alarms[index]
+              first_fired = alarm
             }
           }
           index++
         }
         if(first_fired != undefined){
+          that.addLog(first_fired.title + " executeAction()")
           first_fired.executeAction()
         }
         callback()
@@ -105,9 +107,9 @@ App({
   },
 
   addLog:function(msg){
-    this.globalData.logs.push({time:new Date, message:msg});
+    this.globalData.logs.unshift({time:new Date, message:msg});
     if(this.globalData.logs.length > 100){
-      this.globalData.logs.shift();
+      this.globalData.logs.pop();
     }
   },
 

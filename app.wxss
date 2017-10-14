@@ -10,7 +10,12 @@
 }
 
 .map_area{
-  height: 85vh;
+  height: 55vh;
+  width: 100%;
+}
+
+.status_area{
+  height: 40vh;
   width: 100%;
 }
 

@@ -1,6 +1,6 @@
 <!--logs.wxml-->
 <scroll-view scroll-y style="height:100vh;display:flex;flex-direction:column">
   <view wx:for="{{logs}}" wx:for-item="log" wx:key="index" style="display:flex;flex-direction:column">
-    <text id="{{index}}" class="log-item">{{index + 1}}.{{log}}</text>
+    <text id="{{index}}" class="log-item">{{log}}</text>
   </view>
 </scroll-view>
