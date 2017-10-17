@@ -12,6 +12,7 @@ var ringtoneUrl = [
 
 const util = require('./utils/util.js')
 const voiceplayer = require('./utils/voiceplayer.js')
+const countDownStart = 29   //30TIMES,When Timeout in index.js = 15s, Waittime=5min
 
 App({
   onLaunch: function () {
@@ -59,8 +60,39 @@ App({
   },
 
   checkAlarms: function (callback) {
+    //console.log("checkAlarms!")
     var that = this;
-    that.globalData.here = undefined
+    var armdCounter = 0;
+    that.globalData.alarms.forEach(function(x){
+      if(x.state == "armed"){
+        armdCounter++;
+      }
+    })
+
+    if(armdCounter == 0){
+      if (that.globalData.countDown == 0){
+        that.checkAlarmsImpl(callback)
+        that.globalData.countDown = countDownStart;
+      }else{
+        that.globalData.countDown--;  
+      }
+    }else{
+      that.globalData.countDown = countDownStart;
+      that.checkAlarmsImpl(callback)
+    }
+
+    for (var index = 0; index < that.globalData.alarms.length; index++){
+      var alarm = that.globalData.alarms[index]
+      if (alarm.state == 'fired') {
+        alarm.executeAction();
+        break;
+      }
+    }
+  },
+
+  checkAlarmsImpl: function (callback) {
+    //console.log('checkAlarmsImpl')
+    var that = this
     util.getLocation({
       success: function (res) {
         that.globalData.here = {
@@ -69,21 +101,10 @@ App({
           accuracy: res.accuracy
         }
         var index = 0;
-        var first_fired = undefined;
         while (index < that.globalData.alarms.length) {
           var alarm = that.globalData.alarms[index]
           alarm.checkLocation(res.latitude, res.longitude, res.accuracy)
-          if (alarm.state == 'fired') {
-            that.addLog(alarm.title + " fired.")
-            if(first_fired == undefined){
-              first_fired = alarm
-            }
-          }
           index++
-        }
-        if(first_fired != undefined){
-          that.addLog(first_fired.title + " executeAction()")
-          first_fired.executeAction()
         }
         callback()
       },
@@ -121,5 +142,6 @@ App({
     alarms: [],
     currentAlarm: null,
     logs:[],
+    countDown: 0
   }
 })
