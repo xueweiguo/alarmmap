@@ -66,11 +66,21 @@ Page({
     })
   },
 
-  cancelButtonTaped: function () {
+  acceptButtonTaped: function () {
     var current = app.globalData.alarms[this.data.current_alarm]
     if(current != undefined){
       if(current.state == "fired"){
-        current.cancel()
+        current.accept()
+        this.showMap(true)
+      }
+    }
+  },
+
+  resumeButtonTaped: function () {
+    var current = app.globalData.alarms[this.data.current_alarm]
+    if (current != undefined) {
+      if (current.state == "accepted") {
+        current.resume()
         this.showMap(true)
       }
     }
@@ -96,6 +106,7 @@ Page({
   },
   
   showMap: function(first_show) {
+    //console.log('showMap')
     var that = this    
     var here = app.globalData.here
     var markers = app.globalData.alarms.map(function (x) {
@@ -116,7 +127,7 @@ Page({
     var alarms = app.globalData.alarms.map(function (x) {
       return {
         title: x.title,
-        status: x.getStatus(here)
+        status: x.getStatus()
       }
     })
 
@@ -141,7 +152,8 @@ Page({
       that.showMap(true);
     });
 
-    startTimer(10000, function () {
+      startTimer(15000, function () {
+      //startTimer(5000, function () {
       //console.log("OnTimer!")
       var now = new Date();
       wx.setTopBarText({
