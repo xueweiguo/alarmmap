@@ -24,7 +24,7 @@ function play(url) {
   var savedFile = this.urlMap.get(url)
   if (savedFile != undefined) {
     //已经存在缓存文件，直接播放缓存文件
-    app.addLog('播放缓存铃声')
+    //app.addLog('播放缓存铃声')
     wx.playVoice({
       filePath: savedFile,
       fail: function () {
@@ -37,7 +37,7 @@ function play(url) {
     })
   } else {
     //没有缓存文件，下载并播放
-    app.addLog('that.downloadAndPlay')
+    //app.addLog('that.downloadAndPlay')
     that.downloadAndPlay(url)
   }
 }
@@ -49,9 +49,9 @@ function play(url) {
     that.downloadFile({
       url: url,
       success: function (savedFilePath) {
-        app.addLog('saveFileSuccess')
+        //app.addLog('saveFileSuccess')
         //下载成功，播放文件
-        app.addLog('播放下载铃声')
+        //app.addLog('播放下载铃声')
         wx.playVoice({
           filePath: savedFilePath,
         })
