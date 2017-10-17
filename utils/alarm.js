@@ -16,6 +16,9 @@ function Alarm(data){
   this.action_type = data.action_type
   this.media_url = data.media_url
   this.timer = data.timer
+  this.distance = -1
+  this.playCounter = 0
+  this.testIndex = 0;
 }
 
 //定义原型
@@ -42,12 +45,25 @@ Alarm.prototype ={
     this.timer = t_name
   },
 
-  cancel: function(){
-    this.state = 'ready'
+  setState: function(_state){
+    const app = getApp()
+    this.state = _state
     this.checkBuffer.length = 0
+    if(_state == "fired"){
+      this.playCounter = 0;
+    }
+    app.addLog(this.title + ',' + this.state)
   },
 
-  getStatus: function(location){
+  accept: function(){
+    this.setState("accepted")  
+  },
+
+  resume: function () {
+    this.setState("ready")
+  },
+
+  getStatus: function(){
     var status = undefined
     if (this.monitor_type == '接近监控点') {
       status = "接近,"
@@ -55,8 +71,8 @@ Alarm.prototype ={
       status = "离开,"
     }
     
-    if(location != undefined){
-      status += this.getDistance(location.latitude, location.longitude).toFixed(0)
+    if(this.distance != -1){
+      status += this.distance.toFixed(0)
     }else{
       status += '?'
     }
@@ -72,21 +88,26 @@ Alarm.prototype ={
   },
 
   getDistance: function (latitude, longitude) {
-    return util.getDistance(this.latitude, this.longitude, latitude, longitude)
+    var test = 
+    [800, 700, 600, 500, 400, 300, 200, 100, 
+    90, 80, 70, 60, 50, 40, 52, 43, 53, 81, 101, 
+    201, 301, 401, 501, 502, 403, 304, 204, 105, 
+    96, 87, 78, 69, 50, 41, 42, 43, 54, 89, 100, 
+    110, 123, 145, 156]
+    if(this.testIndex < test.length){
+      return test[this.testIndex++]
+    }else{
+      return 0
+    }
+    //return util.getDistance(this.latitude, this.longitude, latitude, longitude)
   },
 
   checkLocation: function (latitude, longitude, accuracy) {
     const app = getApp()
     var that = this;
-    var distance = this.getDistance(latitude, longitude)
+    
+    this.distance = this.getDistance(latitude, longitude)
     //app.addLog(distance + "," + accuracy)
-
-    //50m
-    if (distance < 50) {
-      this.checkBuffer.push(1)
-    } else {
-      this.checkBuffer.push(-1)
-    }
 
     if (this.checkBuffer.length > CHECK_BUFFER_SIZE) {
       this.checkBuffer.shift()
@@ -97,41 +118,122 @@ Alarm.prototype ={
 
     //app.addLog(sum)
     if (this.monitor_type == '接近监控点') {
-      //app.addLog('接近监控点')
-      if ((this.state == 'ready') || (this.state == 'fired')) {
-        if (sum == -CHECK_BUFFER_SIZE) {
-          this.state = 'armed'
-        }
-      } else if (this.state == 'armed') {
-        if (sum == CHECK_BUFFER_SIZE) {
-          this.state = 'fired'
-        }
+      this.enterAlarmCheck(this.distance, accuracy);
+    } else {
+      this.leaveAlarmCheck(this.distance, accuracy);
+    }
+  },
+
+  enterAlarmCheck: function (distance, accuracy){
+    if (this.state == 'ready') {
+      //1000m
+      if (distance < 500) {
+        this.checkBuffer.push(1)
+      } else {
+        this.checkBuffer.push(-1)
+      }
+      if (this.checkBuffer.length > CHECK_BUFFER_SIZE){
+        this.checkBuffer.shift()
+      }
+      var sum = this.checkBuffer.reduce(function(x,y){return x + y}, 0)
+      if (sum == CHECK_BUFFER_SIZE) {
+        this.setState('armed')
+      }
+    } else if (this.state == 'armed') {
+      //100m
+      if (distance < 100) {
+        this.checkBuffer.push(1)
+      } else if (distance > 500) {
+        this.checkBuffer.push(-1)
+      }
+      if (this.checkBuffer.length > CHECK_BUFFER_SIZE) {
+        this.checkBuffer.shift()
+      }
+      var sum = this.checkBuffer.reduce(function (x, y) { return x + y }, 0)
+      if (sum == CHECK_BUFFER_SIZE) {
+        this.setState('fired')
+      }else if (sum == -CHECK_BUFFER_SIZE) {
+        this.setState('ready')
+      }
+    } else if (this.state == 'fired'){ //fired
+      this.checkBuffer.push(1)
+      if(this.checkBuffer.length == 10){
+        this.setState('accepted')
+      }
+    } else{
+      if (distance > 100) {
+        this.checkBuffer.push(1)
+      } else {
+        this.checkBuffer.push(-1)
+      }
+      if (this.checkBuffer.length > CHECK_BUFFER_SIZE) {
+        this.checkBuffer.shift()
+      }
+      var sum = this.checkBuffer.reduce(function (x, y) { return x + y }, 0)
+      if (sum == CHECK_BUFFER_SIZE) {
+        this.setState('ready')
+      }
+    }
+  },
+
+  leaveAlarmCheck: function (distance, accuracy){
+    //app.addLog('离开监控点')
+    if (this.state == 'ready') {
+      //100m
+      if (distance < 100) {
+        this.checkBuffer.push(1)
+      } else {
+        this.checkBuffer.push(-1)
+      }
+      if (this.checkBuffer.length > CHECK_BUFFER_SIZE) {
+        this.checkBuffer.shift()
+      }
+      var sum = this.checkBuffer.reduce(function (x, y) { return x + y }, 0)
+      if (sum == CHECK_BUFFER_SIZE) {
+        this.setState('armed')
+      }
+    } else if (this.state == 'armed') {
+      //100m
+      if (distance > 100) {
+        this.checkBuffer.push(1)
+      } else {
+        this.checkBuffer.push(-1)
+      }
+      if (this.checkBuffer.length > CHECK_BUFFER_SIZE) {
+        this.checkBuffer.shift()
+      }
+      var sum = this.checkBuffer.reduce(function (x, y) { return x + y }, 0)
+      if (sum == CHECK_BUFFER_SIZE) {
+        this.setState('fired')
+      } 
+    } else if (this.state == 'fired') { //fired
+      this.checkBuffer.push(1)
+      if (this.checkBuffer.length == 10) {
+        this.setState('accepted')
       }
     } else {
-      //app.addLog('离开监控点')
-      if ((this.state == 'ready') || (this.state == 'fired')) {
-        if (sum == CHECK_BUFFER_SIZE) {
-          this.state = 'armed'
-        }
-      } else if (this.state == 'armed') {
-        if (sum == -CHECK_BUFFER_SIZE) {
-          this.state = 'fired'
-        }
-      }      
+      if (distance < 100) {
+        this.checkBuffer.push(1)
+      } else {
+        this.checkBuffer.push(-1)
+      }
+      if (this.checkBuffer.length > CHECK_BUFFER_SIZE) {
+        this.checkBuffer.shift()
+      }
+      var sum = this.checkBuffer.reduce(function (x, y) { return x + y }, 0)
+      if (sum == CHECK_BUFFER_SIZE) {
+        this.setState('ready')
+      }
     }
-    /*
-    if (this.checkBuffer.length == CHECK_BUFFER_SIZE){
-        this.state = 'fired'
-    }
-    */
-    
-    //app.addLog(this.state)
   },
 
   executeAction: function () {
     const app = getApp()
-    app.addLog('playVoice:' + this.media_url)
     voiceplayer.play(this.media_url) 
+    if (++this.playCounter == 10){
+      this.setState("accepted")
+    }
+    //console.log("this.playCounter = " + this.playCounter)
   },
 };
 
