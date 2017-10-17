@@ -11,7 +11,8 @@
 <view class="navigate_bar">
     <button bindtap="newButtonTaped" class="navigate_btn_3" style="background-color:coral;">新建</button>
     <button bindtap="deleteButtonTaped" class="navigate_btn_3" style="background-color:coral;">删除</button>
-    <button bindtap="cancelButtonTaped" class="navigate_btn_3" style="background-color:coral;">取消</button>
+    <button bindtap="acceptButtonTaped" class="navigate_btn_3" style="background-color:coral;">接受</button>
+    <!--<button bindtap="resumeButtonTaped" class="navigate_btn_3" style="background-color:coral;">复活</button>-->
     <button bindtap="showButtonTaped" class="navigate_btn_3" style="background-color:coral;">查看</button>
 </view>
 
