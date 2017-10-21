@@ -9,7 +9,7 @@
   </picker-view>  
 </view>
 <view class="navigate_bar">
-    <button bindtap="editActionButtonTaped" class="navigate_btn_3" style="background-color:coral;">编辑动作</button>
+    <button bindtap="editActionButtonTaped" class="navigate_btn_3">下一步</button>
 </view>
 
 

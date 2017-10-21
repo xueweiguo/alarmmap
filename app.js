@@ -12,7 +12,7 @@ var ringtoneUrl = [
 
 const util = require('./utils/util.js')
 const voiceplayer = require('./utils/voiceplayer.js')
-const countDownStart = 29   //30TIMES,When Timeout in index.js = 15s, Waittime=5min
+const countDownStart = 7   //8TIMES,When Timeout in index.js = 15s, Waittime=2min
 
 App({
   onLaunch: function () {
@@ -31,8 +31,15 @@ App({
       that.globalData.alarms.push(new Alarm(alarm_data));
     })
 
-    this.addLog("app.onLaunch")
+    //this.addLog("app.onLaunch")
     voiceplayer.prepare()
+  },
+
+  onShow: function (options) {
+    
+  },
+  onHide: function () {
+   // this.addLog('app.onHide, pageCount=' + getCurrentPages().length) 
   },
 
   addAlarm: function(alarm){
@@ -59,8 +66,16 @@ App({
     }
   },
 
-  checkAlarms: function (callback) {
-    //console.log("checkAlarms!")
+  resumeAlarms:function(){
+    this.globalData.alarms.forEach(function(alarm){alarm.resume()})  
+  },
+
+  suspendAlarms:function(){
+    this.globalData.alarms.forEach(function(alarm){ alarm.suspend()})  
+  },
+
+  checkAlarms: function (callback, absolute) {
+    console.log("checkAlarms!")
     var that = this;
     var armdCounter = 0;
     that.globalData.alarms.forEach(function(x){
@@ -69,16 +84,16 @@ App({
       }
     })
 
-    if(armdCounter == 0){
-      if (that.globalData.countDown == 0){
-        that.checkAlarmsImpl(callback)
-        that.globalData.countDown = countDownStart;
-      }else{
-        that.globalData.countDown--;  
-      }
-    }else{
+    if ((armdCounter != 0) || (absolute == true)){
       that.globalData.countDown = countDownStart;
       that.checkAlarmsImpl(callback)
+    }else{
+      if (that.globalData.countDown == 0) {
+        that.checkAlarmsImpl(callback)
+        that.globalData.countDown = countDownStart;
+      } else {
+        that.globalData.countDown--;
+      }
     }
 
     for (var index = 0; index < that.globalData.alarms.length; index++){
@@ -91,7 +106,7 @@ App({
   },
 
   checkAlarmsImpl: function (callback) {
-    //console.log('checkAlarmsImpl')
+    console.log('checkAlarmsImpl')
     var that = this
     util.getLocation({
       success: function (res) {

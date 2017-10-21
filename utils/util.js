@@ -17,6 +17,7 @@ function getDistance(lat1, lng1, lat2, lng2) {
 }  
 
 function getLocation(callback) {
+  //onsole.log('util.getLocation')
   wx.getLocation({
     type: 'gcj02', // 返回 可以 用于 wx. openLocation 的 经纬度 
     success: function( res ) {

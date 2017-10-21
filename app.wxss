@@ -38,7 +38,10 @@
   width: 100%;
   display:flex;
   align-items:center; 
-  background-color:green;
+  border-style: solid none none none;
+  border-width:1px;
+  border-color:lightgray;
+  /*background-color:lightgray;*/
 }
 
 .navigate_btn_3 {

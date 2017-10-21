@@ -5,11 +5,23 @@ const voiceplayer = require('./voiceplayer.js')
 
 const CHECK_BUFFER_SIZE = 3
 
+const DISTANCE_OUTER = 500
+const DISTANCE_INNER = 100
+
+const SUSPEND = 'suspend'
+const READY = 'ready'
+const ARMED = 'armed'
+const FIRED = 'fired'
+const ACCEPTED = 'accepted'
+
+const ENTER_ALARM = "接近监控点"
+const LEAVE_ALARM = "离开监控点"
+
 //构造函数
 function Alarm(data){
   this.latitude = data.latitude
   this.longitude = data.longitude
-  this.state = "ready"
+  this.state = SUSPEND
   this.checkBuffer = []
   this.title = data.title
   this.monitor_type = data.monitor_type
@@ -49,26 +61,38 @@ Alarm.prototype ={
     const app = getApp()
     this.state = _state
     this.checkBuffer.length = 0
-    if(_state == "fired"){
+    if(_state == FIRED){
       this.playCounter = 0;
+    }
+    else if(_state == SUSPEND){
+      this.distance = -1
     }
     app.addLog(this.title + ',' + this.state)
   },
 
+  getState: function(){
+    return this.state;
+  },
+
   accept: function(){
-    this.setState("accepted")  
+    this.setState(ACCEPTED)  
+  },
+
+  suspend: function () {
+    this.setState(SUSPEND)
   },
 
   resume: function () {
-    this.setState("ready")
+    this.setState(READY)
   },
 
   getStatus: function(){
     var status = undefined
-    if (this.monitor_type == '接近监控点') {
-      status = "接近,"
+    
+    if(this.monitor_type == ENTER_ALARM){
+      status = 'enter,'
     }else{
-      status = "离开,"
+      status = 'leave,'
     }
     
     if(this.distance != -1){
@@ -88,6 +112,7 @@ Alarm.prototype ={
   },
 
   getDistance: function (latitude, longitude) {
+    /*
     var test = 
     [800, 700, 600, 500, 400, 300, 200, 100, 
     90, 80, 70, 60, 50, 40, 52, 43, 53, 81, 101, 
@@ -98,8 +123,8 @@ Alarm.prototype ={
       return test[this.testIndex++]
     }else{
       return 0
-    }
-    //return util.getDistance(this.latitude, this.longitude, latitude, longitude)
+    }*/
+    return util.getDistance(this.latitude, this.longitude, latitude, longitude)
   },
 
   checkLocation: function (latitude, longitude, accuracy) {
@@ -117,7 +142,7 @@ Alarm.prototype ={
     that.checkBuffer.forEach(function (value) {sum += value})
 
     //app.addLog(sum)
-    if (this.monitor_type == '接近监控点') {
+    if (this.monitor_type == ENTER_ALARM){
       this.enterAlarmCheck(this.distance, accuracy);
     } else {
       this.leaveAlarmCheck(this.distance, accuracy);
@@ -125,9 +150,8 @@ Alarm.prototype ={
   },
 
   enterAlarmCheck: function (distance, accuracy){
-    if (this.state == 'ready') {
-      //1000m
-      if (distance < 500) {
+    if (this.state == READY) {
+      if (distance < DISTANCE_OUTER) {
         this.checkBuffer.push(1)
       } else {
         this.checkBuffer.push(-1)
@@ -137,13 +161,13 @@ Alarm.prototype ={
       }
       var sum = this.checkBuffer.reduce(function(x,y){return x + y}, 0)
       if (sum == CHECK_BUFFER_SIZE) {
-        this.setState('armed')
+        this.setState(ARMED)
       }
-    } else if (this.state == 'armed') {
+    } else if (this.state == ARMED) {
       //100m
-      if (distance < 100) {
+      if (distance < DISTANCE_INNER) {
         this.checkBuffer.push(1)
-      } else if (distance > 500) {
+      } else if (distance > DISTANCE_OUTER) {
         this.checkBuffer.push(-1)
       }
       if (this.checkBuffer.length > CHECK_BUFFER_SIZE) {
@@ -151,17 +175,17 @@ Alarm.prototype ={
       }
       var sum = this.checkBuffer.reduce(function (x, y) { return x + y }, 0)
       if (sum == CHECK_BUFFER_SIZE) {
-        this.setState('fired')
+        this.setState(FIRED)
       }else if (sum == -CHECK_BUFFER_SIZE) {
-        this.setState('ready')
+        this.setState(READY)
       }
-    } else if (this.state == 'fired'){ //fired
+    } else if (this.state == FIRED){ //fired
       this.checkBuffer.push(1)
       if(this.checkBuffer.length == 10){
-        this.setState('accepted')
+        this.setState(ACCEPTED)
       }
     } else{
-      if (distance > 100) {
+      if (distance > DISTANCE_INNER) {
         this.checkBuffer.push(1)
       } else {
         this.checkBuffer.push(-1)
@@ -171,16 +195,20 @@ Alarm.prototype ={
       }
       var sum = this.checkBuffer.reduce(function (x, y) { return x + y }, 0)
       if (sum == CHECK_BUFFER_SIZE) {
-        this.setState('ready')
+        this.setState(READY)
       }
     }
   },
 
   leaveAlarmCheck: function (distance, accuracy){
     //app.addLog('离开监控点')
-    if (this.state == 'ready') {
+    if (this.state == READY) {
       //100m
-      if (distance < 100) {
+      if (distance < DISTANCE_INNER) {
+        this.setState(ARMED)
+      }
+    } else if (this.state == ARMED) {
+       if (distance > DISTANCE_INNER) {
         this.checkBuffer.push(1)
       } else {
         this.checkBuffer.push(-1)
@@ -190,29 +218,15 @@ Alarm.prototype ={
       }
       var sum = this.checkBuffer.reduce(function (x, y) { return x + y }, 0)
       if (sum == CHECK_BUFFER_SIZE) {
-        this.setState('armed')
-      }
-    } else if (this.state == 'armed') {
-      //100m
-      if (distance > 100) {
-        this.checkBuffer.push(1)
-      } else {
-        this.checkBuffer.push(-1)
-      }
-      if (this.checkBuffer.length > CHECK_BUFFER_SIZE) {
-        this.checkBuffer.shift()
-      }
-      var sum = this.checkBuffer.reduce(function (x, y) { return x + y }, 0)
-      if (sum == CHECK_BUFFER_SIZE) {
-        this.setState('fired')
+        this.setState(FIRED)
       } 
-    } else if (this.state == 'fired') { //fired
+    } else if (this.state == FIRED) { //fired
       this.checkBuffer.push(1)
       if (this.checkBuffer.length == 10) {
-        this.setState('accepted')
+        this.setState(ACCEPTED)
       }
     } else {
-      if (distance < 100) {
+      if (distance < DISTANCE_INNER) {
         this.checkBuffer.push(1)
       } else {
         this.checkBuffer.push(-1)
@@ -222,7 +236,7 @@ Alarm.prototype ={
       }
       var sum = this.checkBuffer.reduce(function (x, y) { return x + y }, 0)
       if (sum == CHECK_BUFFER_SIZE) {
-        this.setState('ready')
+        this.setState(READY)
       }
     }
   },

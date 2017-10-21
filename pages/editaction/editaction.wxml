@@ -8,11 +8,6 @@
         监控类型：{{monitor_array[monitor_index]}}
       </view>
     </picker>
-    <picker bindchange="bindActionTypeChange" value="{{action_index}}" range="{{action_array}}">
-      <view class="picker">
-        动作类型：{{action_array[action_index]}}
-      </view>
-    </picker>
     <view>
       <view wx:if="{{action_index>0}}">
         <picker  bindchange="bindTimerChange" value="{{timer_index}}" range="{{timer_array}}">
@@ -33,6 +28,6 @@
 </view>
  <text class ="location_text">{{msg}}</text>
 <view class="navigate_bar">
-    <button bindtap="cancelButtonTaped"class="navigate_btn_3" style="background-color:coral;">取消</button>
-    <button bindtap="okButtonTaped" class="navigate_btn_3" style="background-color:coral;">决定</button>
+    <button bindtap="cancelButtonTaped"class="navigate_btn_3">取消</button>
+    <button bindtap="okButtonTaped" class="navigate_btn_3">决定</button>
 </view>

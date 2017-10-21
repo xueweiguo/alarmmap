@@ -1,19 +1,28 @@
 <!--index.wxml-->
 <view class="container">
   <map id = "alarmMap" class="map_area" longitude="{{longitude}}" latitude="{{latitude}}" scale = "{{scale}}" markers="{{markers}}"></map>
-  <scroll-view scroll-y style="height:40vh;display:flex;flex-direction:column">
+  <scroll-view scroll-y style="height:40vh;display:flex;flex-direction:column;">
   <view bindtap="alarmTaped" wx:for="{{alarms}}" wx:for-item="alarm" wx:key="index" style="display:flex;flex-direction:column">
-    <text wx:if="{{current_alarm==index}}" id="{{index}}" style = "background-color:lightgreen;" class="log-item">{{index + 1}}.{{alarm.title}}({{alarm.status}})</text>
-    <text wx:else id="{{index}}" style = "background-color:white;" class="log-item">{{index + 1}}.{{alarm.title}}({{alarm.status}})</text>
+    <view id="{{index}}" wx:if="{{current_alarm==index}}" style="display:flex;flex-direction:row">
+      <view style="display:flex;flex-direction:column;flex-grow:1;">
+        <text style = "background-color:lightgreen;" class="log-item">{{index + 1}}.{{alarm.title}}</text>
+        <text style = "background-color:lightgreen;" class="log-item">({{alarm.status}})</text>
+      </view>
+      <button wx:if="{{monitor_on==false}}" id="{{index}}" bindtap="deleteButtonTaped" class = "itembutton">删除</button>
+      <button wx:if="{{monitor_on==true}}" id="{{index}}" bindtap="acceptButtonTaped" class = "itembutton" style="color:{{accept_btn_color}};">接受</button>
+    </view>
+    <view id="{{index}}" wx:else style="display:flex;flex-direction:column">
+      <text id="{{index}}" style = "background-color:white;" class="log-item">{{index + 1}}.{{alarm.title}}</text>
+      <text id="{{index}}" style = "background-color:white;" class="log-item">({{alarm.status}})</text>
+    </view>
   </view>
+  <button wx:if="{{monitor_on==false}}" bindtap="newButtonTaped">新建监控点</button>
 </scroll-view>
 </view>
 <view class="navigate_bar">
-    <button bindtap="newButtonTaped" class="navigate_btn_3" style="background-color:coral;">新建</button>
-    <button bindtap="deleteButtonTaped" class="navigate_btn_3" style="background-color:coral;">删除</button>
-    <button bindtap="acceptButtonTaped" class="navigate_btn_3" style="background-color:coral;">接受</button>
-    <!--<button bindtap="resumeButtonTaped" class="navigate_btn_3" style="background-color:coral;">复活</button>-->
-    <button bindtap="showButtonTaped" class="navigate_btn_3" style="background-color:coral;">查看</button>
+    <button wx:if="{{monitor_on==false}}" bindtap="startMonitor" class="navigate_btn_3">开始监控</button>
+    <button wx:if="{{monitor_on==true}}"bindtap="stopMonitor" class="navigate_btn_3" style="background-color:lightgreen;">停止监控</button>
+    <button bindtap="showButtonTaped" class="navigate_btn_3">事件记录</button>
 </view>
 
 
