@@ -6,7 +6,7 @@ const voiceplayer = require('./voiceplayer.js')
 const CHECK_BUFFER_SIZE = 3
 
 const DISTANCE_OUTER = 500
-const DISTANCE_INNER = 100
+const DISTANCE_INNER = 50
 
 const SUSPEND = 'suspend'
 const READY = 'ready'
@@ -74,6 +74,11 @@ Alarm.prototype ={
     return this.state;
   },
 
+  isActive: function(){
+    return (this.state == READY
+      || this.state == ARMED)
+  },
+
   accept: function(){
     this.setState(ACCEPTED)  
   },
@@ -123,7 +128,8 @@ Alarm.prototype ={
       return test[this.testIndex++]
     }else{
       return 0
-    }*/
+    }
+    */
     return util.getDistance(this.latitude, this.longitude, latitude, longitude)
   },
 

@@ -12,7 +12,7 @@ var ringtoneUrl = [
 
 const util = require('./utils/util.js')
 const voiceplayer = require('./utils/voiceplayer.js')
-const countDownStart = 7   //8TIMES,When Timeout in index.js = 15s, Waittime=2min
+const countDownStart = 19   //20TIMES,When Timeout in index.js = 15s, Waittime=5min
 
 App({
   onLaunch: function () {
@@ -75,16 +75,11 @@ App({
   },
 
   checkAlarms: function (callback, absolute) {
-    console.log("checkAlarms!")
+    console.log("checkAlarms,dis=", this.globalData.lastDistance)
     var that = this;
-    var armdCounter = 0;
-    that.globalData.alarms.forEach(function(x){
-      if(x.state == "armed"){
-        armdCounter++;
-      }
-    })
 
-    if ((armdCounter != 0) || (absolute == true)){
+    //最近监控点在500m以内时，提高监控频率
+    if ((that.globalData.lastDistance < 500) || (absolute == true)){
       that.globalData.countDown = countDownStart;
       that.checkAlarmsImpl(callback)
     }else{
@@ -116,11 +111,18 @@ App({
           accuracy: res.accuracy
         }
         var index = 0;
+        var min_distance = 10000 //big enough
         while (index < that.globalData.alarms.length) {
           var alarm = that.globalData.alarms[index]
           alarm.checkLocation(res.latitude, res.longitude, res.accuracy)
+          if(alarm.isActive()){
+            if(alarm.distance < min_distance){
+              min_distance = alarm.distance
+            }
+          }
           index++
         }
+        that.globalData.lastDistance = min_distance
         callback()
       },
     })
@@ -157,6 +159,7 @@ App({
     alarms: [],
     currentAlarm: null,
     logs:[],
-    countDown: 0
+    countDown: 0,
+    lastDistance:0
   }
 })

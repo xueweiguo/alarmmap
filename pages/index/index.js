@@ -38,6 +38,7 @@ Page({
   alarmTaped: function (e) {
     console.log(e.target.id);
     this.setData({ current_alarm: e.target.id });
+    this.showAlarms();
   },
 
   controlButtonTaped:function(){
