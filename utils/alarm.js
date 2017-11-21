@@ -3,7 +3,7 @@
 const util = require('./util.js')
 const voiceplayer = require('./voiceplayer.js')
 
-const CHECK_BUFFER_SIZE = 3
+const CHECK_BUFFER_SIZE = 2
 
 const DISTANCE_OUTER = 500
 const DISTANCE_INNER = 50
@@ -118,12 +118,13 @@ Alarm.prototype ={
 
   getDistance: function (latitude, longitude) {
     /*
-    var test = 
-    [800, 700, 600, 500, 400, 300, 200, 100, 
-    90, 80, 70, 60, 50, 40, 52, 43, 53, 81, 101, 
-    201, 301, 401, 501, 502, 403, 304, 204, 105, 
-    96, 87, 78, 69, 50, 41, 42, 43, 54, 89, 100, 
-    110, 123, 145, 156]
+    var test = [
+      800, 700, 600, 500, 400, 300, 200, 100, 
+      90, 80, 70, 60, 50, 40, 52, 43, 40, 81, 101, 
+      201, 301, 401, 501, 502, 403, 304, 204, 105, 
+      96, 87, 78, 69, 50, 41, 42, 43, 54, 89, 100, 
+      110, 123, 145, 156
+    ]
     if(this.testIndex < test.length){
       return test[this.testIndex++]
     }else{
@@ -175,6 +176,8 @@ Alarm.prototype ={
         this.checkBuffer.push(1)
       } else if (distance > DISTANCE_OUTER) {
         this.checkBuffer.push(-1)
+      }else{
+        this.checkBuffer.push(0)
       }
       if (this.checkBuffer.length > CHECK_BUFFER_SIZE) {
         this.checkBuffer.shift()
@@ -191,18 +194,7 @@ Alarm.prototype ={
         this.setState(ACCEPTED)
       }
     } else{
-      if (distance > DISTANCE_INNER) {
-        this.checkBuffer.push(1)
-      } else {
-        this.checkBuffer.push(-1)
-      }
-      if (this.checkBuffer.length > CHECK_BUFFER_SIZE) {
-        this.checkBuffer.shift()
-      }
-      var sum = this.checkBuffer.reduce(function (x, y) { return x + y }, 0)
-      if (sum == CHECK_BUFFER_SIZE) {
-        this.setState(READY)
-      }
+     //SUSPEND,do nothing.
     }
   },
 
@@ -232,18 +224,7 @@ Alarm.prototype ={
         this.setState(ACCEPTED)
       }
     } else {
-      if (distance < DISTANCE_INNER) {
-        this.checkBuffer.push(1)
-      } else {
-        this.checkBuffer.push(-1)
-      }
-      if (this.checkBuffer.length > CHECK_BUFFER_SIZE) {
-        this.checkBuffer.shift()
-      }
-      var sum = this.checkBuffer.reduce(function (x, y) { return x + y }, 0)
-      if (sum == CHECK_BUFFER_SIZE) {
-        this.setState(READY)
-      }
+      //SUSPEDN,do nothing. 
     }
   },
 

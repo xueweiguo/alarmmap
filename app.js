@@ -12,7 +12,7 @@ var ringtoneUrl = [
 
 const util = require('./utils/util.js')
 const voiceplayer = require('./utils/voiceplayer.js')
-const countDownStart = 19   //20TIMES,When Timeout in index.js = 15s, Waittime=5min
+const countDownStart = 3   //20TIMES,When Timeout in index.js = 15s, Waittime=1min
 
 App({
   onLaunch: function () {
@@ -90,14 +90,6 @@ App({
         that.globalData.countDown--;
       }
     }
-
-    for (var index = 0; index < that.globalData.alarms.length; index++){
-      var alarm = that.globalData.alarms[index]
-      if (alarm.state == 'fired') {
-        alarm.executeAction();
-        break;
-      }
-    }
   },
 
   checkAlarmsImpl: function (callback) {
@@ -122,9 +114,19 @@ App({
           }
           index++
         }
+        for (index = 0; index < that.globalData.alarms.length; index++) {
+          var alarm = that.globalData.alarms[index]
+          if (alarm.state == 'fired') {
+            alarm.executeAction();
+            break;
+          }
+        }
         that.globalData.lastDistance = min_distance
         callback()
       },
+      fail:function(res){
+        that.globalData.lastDistance = 0
+      }
     })
   },
 
